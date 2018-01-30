@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config xmlns="http://thelia.net/schema/dic/config"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
+
+    <loops>
+        <loop name="kelkooxml.feed" class="KelkooXml\Loop\FeedLoop" />
+    </loops>
+
+    <forms>
+        <form name="kelkooxml.feed.management" class="KelkooXml\Form\FeedManagementForm" />
+    </forms>
+
+    <hooks>
+        <hook id="kelkooxml.module.config.hook" class="KelkooXml\Hook\HookManager" scope="request">
+            <tag name="hook.event_listener" event="module.configuration" type="back" templates="render:kelkooxml/module-configuration.html" />
+            <tag name="hook.event_listener" event="module.config-js" type="back" templates="render:kelkooxml/module-configuration-js.html" />
+            <tag name="hook.event_listener" event="main.head-css" type="back" />
+            <tag name="hook.event_listener" event="home.bottom" type="back" templates="render:kelkooxml/home-bottom.html" />
+            <tag name="hook.event_listener" event="home.js" type="back" templates="render:kelkooxml/home-js.html" />
+        </hook>
+    </hooks>
+
+</config>

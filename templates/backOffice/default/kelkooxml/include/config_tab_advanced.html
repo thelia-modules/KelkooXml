@@ -1,0 +1,181 @@
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <div class="panel-title">
+            {intl l="Advanced Kelkoo product fields configuration"}
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="alert alert-info">
+            {intl l='In this tab, you can configure Kelkoo XML fields that are not filled by this module.'}
+            {intl l='More information about Kelkoo fields specifications at %link.' link='<a href="https://www.kelkoogroup.com/fr/support/support-aux-marchands/guide-shopping/structure-du-fichier-et-details-des-champs/">https://www.kelkoogroup.com/fr/support/support-aux-marchands/guide-shopping/structure-du-fichier-et-details-des-champs/</a>'}
+        </div>
+
+        {if isset($smarty.get.error_message_advanced_tab)}
+        <div class="alert alert-danger">
+            <strong>{$smarty.get.error_message_advanced_tab}</strong>
+        </div>
+        {/if}
+
+        <div class="alert alert-help">
+            <div class="row">
+                <form method="post" action='{url path="/admin/module/kelkooxml/advanced/field/add"}'>
+                    <div class="form-group col-md-3">
+                        <label for="advanced_input_kelkoo_attribute_new">{intl l="Kelkoo attribute"}</label>
+                        <input id="advanced_input_kelkoo_attribute_new" class="form-control" name="kelkoo_attribute" required/>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="advanced_select_type_new">{intl l="Association type"}</label>
+                        <select id="advanced_select_type_new" class="js_advanced_select_association_type form-control" name="association_type" data-kelkoofieldid="new">
+                            <option value="0">-- {intl l="Select an association type"} --</option>
+                            <option value="1">{intl l="Fixed value"}</option>
+                            <option value="2">{intl l="Linked to a Thelia attribute"}</option>
+                            <option value="3">{intl l="Linked to a Thelia feature"}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div class="js_field_related_to_association_type" data-kelkoofieldid="new" data-associationtype="1">
+                            <label for="advanced_input_fixed_value_new">{intl l="Fixed value"}</label>
+                            <input id="advanced_input_fixed_value_new" class="form-control" name="fixed_value"/>
+                        </div>
+
+                        <div class="js_field_related_to_association_type" data-kelkoofieldid="new" data-associationtype="2">
+                            <label for="advanced_select_thelia_attribute_new">{intl l="Related Thelia attribute"}</label>
+                            <select id="advanced_select_thelia_attribute_new" class="form-control" name="thelia_attribute">
+                                <option value="0">-- {intl l="Select an attribute"} --</option>
+                                {loop name="loop-attributes" type="attribute" order="manual" backend_context="1"}
+                                <option value="{$ID}">{$TITLE}</option>
+                                {/loop}
+                            </select>
+                        </div>
+
+                        <div class="js_field_related_to_association_type" data-kelkoofieldid="new" data-associationtype="3">
+                            <label for="advanced_select_thelia_feature_new">{intl l="Related Thelia feature"}</label>
+                            <select id="advanced_select_thelia_feature_new" class="form-control" name="thelia_feature">
+                                <option value="0">-- {intl l="Select a feature"} --</option>
+                                {loop name="loop-features" type="feature" order="manual" backend_context="1"}
+                                <option value="{$ID}">{$TITLE}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                        <label class="control-label">&nbsp;</label>
+                        <button class="btn btn-default btn-primary form-control" type="submit">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            {intl l="Add"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        {foreach from=$field_association_array item=field_association}
+        {$ID = $field_association.Id}
+        {$KELKOO_FIELD = $field_association.XmlField}
+        {$ASSOCIATION_TYPE = $field_association.AssociationType}
+
+        <div class="row">
+            <form method="post" action='{url path="/admin/module/kelkooxml/advanced/field/update"}'>
+                <input type="hidden" value="{$ID}" name="id"/>
+
+                <div class="form-group col-md-3">
+                    <input class="form-control" name="kelkoo_attribute" value="{$KELKOO_FIELD}" required/>
+                </div>
+
+                <div class="form-group col-md-3 ">
+                    <select class="js_advanced_select_association_type form-control" name="association_type" data-kelkoofieldid="{$ID}">
+                        <option value="0">-- {intl l="Select an association type"} --</option>
+                        <option value="1" {if $ASSOCIATION_TYPE == 1}selected{/if}>{intl l="Fixed value"}</option>
+                        <option value="2" {if $ASSOCIATION_TYPE == 2}selected{/if}>{intl l="Linked to a Thelia attribute"}</option>
+                        <option value="3" {if $ASSOCIATION_TYPE == 3}selected{/if}>{intl l="Linked to a Thelia feature"}</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3 ">
+                    <div class="js_field_related_to_association_type" data-kelkoofieldid="{$ID}" data-associationtype="1">
+                        <input class="form-control" name="fixed_value" value="{$field_association.FixedValue}"/>
+                    </div>
+
+                    <div class="js_field_related_to_association_type" data-kelkoofieldid="{$ID}" data-associationtype="2">
+                        <select class="form-control" name="thelia_attribute">
+                            <option value="0">-- {intl l="Select an attribute"} --</option>
+                            {loop name="loop-attributes" type="attribute" order="manual" backend_context="1"}
+                            <option value="{$ID}" {if $ID == $field_association.IdRelatedAttribute}selected{/if}>{$TITLE}</option>
+                            {/loop}
+                        </select>
+                    </div>
+
+                    <div class="js_field_related_to_association_type" data-kelkoofieldid="{$ID}" data-associationtype="3">
+                        <select class="form-control" name="thelia_feature">
+                            <option value="0">-- {intl l="Select a feature"} --</option>
+                            {loop name="loop-features" type="feature" order="manual" backend_context="1"}
+                            <option value="{$ID}" {if $ID == $field_association.IdRelatedFeature}selected{/if}>{$TITLE}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group col-md-2">
+                    <button class="btn btn-success form-control" type="submit">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        {intl l="Save"}
+                    </button>
+                </div>
+            </form>
+
+            <div class="form-group col-md-1">
+                <form method="post" action='{url path="/admin/module/kelkooxml/advanced/field/delete"}'>
+                    <input type="hidden" value="{$ID}" name="id_field_to_delete"/>
+                    <button class="btn btn-danger form-control" type="submit" title="{intl l='Remove'}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {/foreach}
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="panel-title">
+                    {intl l='Field "EAN" configuration'}
+                </div>
+            </div>
+            <div class="panel-body">
+                <small>{intl l='Which product\'s EAN code should be included in the XML field "ean" ?'}</small>
+                <form action="{url path='/admin/module/kelkooxml/advanced/setEanRule'}" method="post">
+                    <div class="form-group">
+                        <div class="radio">
+                            <label><input type="radio" name="gtin_rule" value="all" {if $ean_rule == "all"}checked="checked"{/if} >{intl l="Include all EAN codes without verification, ignore empty"}</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="gtin_rule" value="check_flexible" {if $ean_rule == "check_flexible"}checked="checked"{/if}>{intl l="Include only valid EAN codes, ignore invalid or empty"}</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="gtin_rule" value="check_strict" {if $ean_rule == "check_strict"}checked="checked"{/if}>{intl l="Include only valid EAN codes, launch error when invalid, ignore empty"}</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="gtin_rule" value="none" {if $ean_rule == "none"}checked="checked"{/if}>{intl l="Do not include any EAN code"}</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success form-control" type="submit"><span class="glyphicon glyphicon-ok"></span> {intl l="Save"}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
