@@ -12,6 +12,8 @@ class KelkooXml extends BaseModule
     const DOMAIN_NAME = 'kelkooxml';
     const DOMAIN_BO_DEFAULT = "kelkooxml.bo.default";
 
+    const KELKOO_LOCAL_DIR = THELIA_LOCAL_DIR . "KelkooXmlFiles" . DS;
+
     /* @var string */
     const UPDATE_PATH = __DIR__ . DS . 'Config' . DS . 'update';
 
