@@ -12,6 +12,10 @@
         <form name="kelkooxml.feed.management" class="KelkooXml\Form\FeedManagementForm" />
     </forms>
 
+    <commands>
+        <command class="KelkooXml\Command\UpdateXmlCommand" />
+    </commands>
+
     <hooks>
         <hook id="kelkooxml.module.config.hook" class="KelkooXml\Hook\HookManager" scope="request">
             <tag name="hook.event_listener" event="module.configuration" type="back" templates="render:kelkooxml/module-configuration.html" />
@@ -21,5 +25,15 @@
             <tag name="hook.event_listener" event="home.js" type="back" templates="render:kelkooxml/home-js.html" />
         </hook>
     </hooks>
+
+    <services>
+        <service id="kelkoo.xml.listener" class="KelkooXml\EventListener\KelkooXmlListener" scope="request">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="thelia.url.manager" />
+            <argument type="service" id="request" />
+            <tag name="kernel.event_subscriber"/>
+        </service>
+    </services>
 
 </config>
